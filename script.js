@@ -18,7 +18,7 @@ function renderQuiz(data) {
   let sectionCounter = 1;
 
   data.forEach((row, index) => {
-    if (row.every(cell => cell.trim() === '')) {
+    if (row.every(cell => !cell?.trim())) {
       const sectionHeader = document.createElement('h2');
       sectionHeader.textContent = `Section ${sectionCounter++}`;
       container.appendChild(sectionHeader);
@@ -26,8 +26,9 @@ function renderQuiz(data) {
       return;
     }
 
-    const [question, A, B, C, D, correct] = row;
-    if (!question || !correct) return;
+    const [question, A, B, C, D, correct] = row.map(cell => cell?.trim() || "");
+
+    if (!question || !correct) return; // skip only if missing entirely
 
     const block = document.createElement('div');
     block.className = 'question-block';
